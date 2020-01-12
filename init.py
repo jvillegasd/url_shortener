@@ -1,12 +1,10 @@
 from flask import Flask
-from flask_restx import Api, Namespace
-from app.main import main_namespace
-from app.jobs.delete_keys import job_namespace
+from app.main import main_blueprint
+from app.jobs.delete_keys import job_blueprint
 
-app = Flask(__name__)
-api = Api(app=app)
-api.add_namespace(main_namespace, path='/api')
-api.add_namespace(job_namespace, path='/job')
+app = Flask(__name__, template_folder='./app/templates')
+app.register_blueprint(main_blueprint)
+app.register_blueprint(job_blueprint)
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=5001, debug=True)
