@@ -10,7 +10,13 @@ redis_db = redis.StrictRedis(**redis_params)
 class Job(Resource):
   def get(self):
     current_time = datetime.today()
-    for hash, date in redis_db.hgetall('time'):
-      print(hash)
-      print(date)
+    hash_to_delete = []
+    for hash, str_date in redis_db.hgetall('time').items():
+      date_obj = datetime.strptime(str_date, '%d/%m/%Y')
+      delta = current_time - date_obj
+      if delta.days >= 0:
+        hash_to_delete.append(hash)
+    if hash_to_delete:
+      redis_db.hdel('time', *hash_to_delete)
+      redis_db.hdel('links', *hash_to_delete)
     return {'message': 'job done'}
