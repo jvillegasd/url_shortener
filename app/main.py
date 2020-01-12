@@ -25,6 +25,7 @@ class Home(Resource):
     else:
       url = hashToUrl(hash)
       if url:
+        lastUsed(url)
         return redirect(url, code=302)
       else:
         return {'message': 'url does not exists'}
@@ -36,7 +37,6 @@ class Short(Resource):
     params = request.get_json()
     url = params['url']
     custom_name = params['custom_name']
-    current_time = (datetime.today()).strftime('%d/%m/%Y')
     if custom_name:
       db_url = hashToUrl(custom_name)
       if not db_url:
@@ -46,7 +46,7 @@ class Short(Resource):
     else:
       new_url = getHash()
     redis_db.hset('links', new_url, url)
-    redis_db.hset('time', new_url, current_time)
+    lastUsed(new_url)
     return {'new_url': new_url}
 
 def getHash():
@@ -62,3 +62,7 @@ def getHash():
 def hashToUrl(hash):
   result = redis_db.hget('links', hash)
   return result
+
+def lastUsed(url):
+  current_time = (datetime.today()).strftime('%d/%m/%Y')
+  redis_db.hset('time', url, current_time)
