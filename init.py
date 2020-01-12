@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restplus import Api, Namespace
+from flask_restx import Api, Namespace
 from app.main import main_namespace
 from app.jobs.delete_keys import job_namespace
 

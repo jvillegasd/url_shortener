@@ -1,5 +1,5 @@
 import redis
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 from app.db.db_connection import redis_params
 from datetime import datetime
 

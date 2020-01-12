@@ -3,7 +3,7 @@ import json
 import string
 from random import choice
 from flask import request, redirect
-from flask_restplus import Namespace, Resource, abort, fields
+from flask_restx import Namespace, Resource, abort, fields
 from app.db.db_connection import redis_params
 from datetime import datetime
 
