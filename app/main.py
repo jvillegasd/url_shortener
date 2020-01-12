@@ -5,6 +5,7 @@ from random import choice
 from flask import request, redirect
 from flask_restplus import Namespace, Resource, abort, fields
 from app.db.db_connection import redis_params
+from datetime import datetime
 
 main_namespace = Namespace('url-shortener', description='url shortener')
 add_url_model = main_namespace.model('Add url', {'url': fields.String, 'custom_name': fields.String}) 
@@ -15,7 +16,10 @@ redis_db = redis.StrictRedis(**redis_params)
 class Home(Resource):
   def get(self, hash=None):
     if hash == 'db':
-      return redis_db.hgetall('links')
+      redis_all = []
+      redis_all.append(redis_db.hgetall('links'))
+      redis_all.append(redis_db.hgetall('time'))
+      return redis_all
     elif not hash:
       return {'message': 'hello to url shortener'}
     else:
@@ -32,6 +36,7 @@ class Short(Resource):
     params = request.get_json()
     url = params['url']
     custom_name = params['custom_name']
+    current_time = (datetime.today()).strftime('%d/%m/%Y')
     if custom_name:
       db_url = hashToUrl(custom_name)
       if not db_url:
@@ -41,6 +46,7 @@ class Short(Resource):
     else:
       new_url = getHash()
     redis_db.hset('links', new_url, url)
+    redis_db.hset('time', new_url, current_time)
     return {'new_url': new_url}
 
 def getHash():
