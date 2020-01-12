@@ -7,7 +7,7 @@ from flask_restplus import Namespace, Resource, abort, fields
 from app.db.db_connection import redis_params
 
 main_namespace = Namespace('url-shortener', description='url shortener')
-add_url_model = main_namespace.model('Add url', {'url': fields.String}) 
+add_url_model = main_namespace.model('Add url', {'url': fields.String, 'custom_name': fields.String}) 
 redis_db = redis.StrictRedis(**redis_params)
 
 @main_namespace.route('/')
@@ -31,7 +31,15 @@ class Short(Resource):
   def post(self):
     params = request.get_json()
     url = params['url']
-    new_url = getHash()
+    custom_name = params['custom_name']
+    if custom_name:
+      db_url = hashToUrl(custom_name)
+      if not db_url:
+        new_url = custom_name
+      else:
+        return {'message': 'custom name already exists'}
+    else:
+      new_url = getHash()
     redis_db.hset('links', new_url, url)
     return {'new_url': new_url}
 
