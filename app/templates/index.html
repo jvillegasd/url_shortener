@@ -7,6 +7,23 @@
   <title>URL shortener</title>
 </head>
 <body>
-  Hello world
+  <h2>
+    Welcome to URL shortener
+  </h2>
+  <p>
+    Warning: Redis free databse is used, so your URL would be deleted due to 28 days of inactivity.
+  </p>
+  <div id="toShort">
+    <input type="text" id="url"/>
+    <button id="short">Short it!</button>
+  </div>
+  <div id="shortOutput" hidden>
+    <p id="output"></p>
+    <button id="back">Back</button>
+  </div>
+  <p>
+    Created by <a href="https://github.com/C9-LinkRs">Johnny Villegas</a>
+  </p>
 </body>
+<script src="{{url_for('static', filename='./js/scripts.js')}}"></script>
 </html>

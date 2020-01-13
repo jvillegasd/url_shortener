@@ -12,7 +12,9 @@ redis_db = redis.StrictRedis(**redis_params)
 short_schema = {
   'url': {
     'type': 'string', 
-    'required': True
+    'required': True,
+    'empty': False,
+    'regex': '^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$'
     },
   'custom_name': 
   {'type': 'string', 

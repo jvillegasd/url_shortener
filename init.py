@@ -2,7 +2,7 @@ from flask import Flask
 from app.main import main_blueprint
 from app.jobs.delete_keys import job_blueprint
 
-app = Flask(__name__, template_folder='./app/templates')
+app = Flask(__name__, template_folder='./app/templates', static_folder='./app/static')
 app.register_blueprint(main_blueprint)
 app.register_blueprint(job_blueprint)
 
